@@ -1,0 +1,1 @@
+console.log("Hello! Welcome to Rock Paper Scissors in 5 rounds!");
