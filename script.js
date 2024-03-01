@@ -1,8 +1,47 @@
 /***************************************************************************/
 /* Main Body */
 /***************************************************************************/
-console.log("Hello! Welcome to Rock Paper Scissors in 5 rounds!");
-playGame();
+let paraChoice = document.querySelector('div.game-info #choice');
+let paraRound = document.querySelector('div.game-info #round');
+let paraScore = document.querySelector('div.game-info #score');
+let paraWinner = document.querySelector('div.game-info #winner');
+let buttonsChoice = [document.querySelector('div.buttons #btn-rock'),
+    document.querySelector('div.buttons #btn-paper'),
+    document.querySelector('div.buttons #btn-scissors')
+];
+let buttonNewGame = document.querySelector('#btn-new-game');
+
+let round = 1;
+let playerScore = 0;
+let computerScore = 0;
+
+paraRound.textContent = `Round: ${round}/5`;
+paraScore.textContent = `Score: Player---${playerScore} to ${computerScore}---Computer`;
+
+
+buttonsChoice.forEach((button) =>{
+    button.addEventListener('click', (e) => {
+        if(round <= 5){
+            paraChoice.textContent = `Player---${e.target.textContent} vs`;
+
+            let roundScore = playRound(e.target.textContent, getComputerChoice());
+            updateScore(roundScore);
+        }
+        else{
+            alert('The game is over! Click the "New Game" button to start a new one.');
+        }
+    })
+});
+
+buttonNewGame.addEventListener('click', () => {
+    computerScore = 0;
+    playerScore = 0;
+    round = 1;
+    paraChoice.textContent = 'Player ______ vs ______ Computer';
+    paraRound.textContent = `Round: ${round}/5`;
+    paraScore.textContent = `Score: Player---${playerScore} to ${computerScore}---Computer`;
+    paraWinner.textContent = 'Winner:';
+});
 
 /***************************************************************************/
 /* Functions */
@@ -34,28 +73,13 @@ function getComputerChoice() {
     }
 }
 
-/*
-This function takes two arguments, the player's choice and the computer's choice.
-From these it determines the winner (player or computer) or if it's a draw, 
-and returns 1 if the player wins, -1 if the player loses, 0 if it's a draw. 
-If either choice is invalid, the function returns undefined.
-*/
+
 function playRound(playerChoice, computerChoice){
-    //Convert choices to lower case
     const playerChoiceLC = playerChoice.toLowerCase();
     const computerChoiceLC = computerChoice.toLowerCase();
 
-    //Return undefined and exit if either choice is invalid
-    if (!validChoice(playerChoiceLC)){
-        console.log("Invalid player's choice!");
-        return undefined;
-    }
-    else if (!validChoice(computerChoiceLC)){
-        console.log("Invalid computer's choice!");
-        return undefined;        
-    }
+    paraChoice.textContent += ` ${computerChoice}---Computer`;
 
-    //Check who won and return the result
     switch (playerChoiceLC){
         case "rock":
             switch (computerChoiceLC) {
@@ -104,42 +128,19 @@ function playRound(playerChoice, computerChoice){
     }
 }
 
-/*
-This function checks whether a choice is valid. It returns true if the choice is valid
-and false if the choice is invalid.
-Recognized list of choices (case-insensitive):
--"rock"
--"paper"
--"scissors"
-*/
-function validChoice(choice){
-    return (choice == "rock") || (choice =="paper") || (choice =="scissors");
-}
 
-/*
-This function plays an entier game, in 5 rounds.
-It prompts the user for their choice at the beginning of each round.
-It displays the result after each round.
-It displays the winner at the end of the fifth round.
-It returns nothing.
-*/
-function playGame(){
-    let playerScore = 0;
-    let computerScore = 0;
-    let roundScore;
+function updateScore(roundScore){
+    playerScore = (roundScore > 0) ? ++playerScore : playerScore;
+    computerScore = (roundScore < 0) ? ++computerScore : computerScore;
 
-    //Play 5 rounds
-    for(let i = 0; i < 5; i++) {
-        //Keep playing round while player's choice is invalid
-        while ((roundScore = playRound(prompt("Enter your choice (rock, paper, or scissors)"), getComputerChoice())) == undefined);
-        playerScore = (roundScore > 0) ? ++playerScore : playerScore;
-        computerScore = (roundScore < 0) ? ++computerScore : computerScore;
-        if (i< 4) console.log(`Current score (player/computer): ${playerScore} to ${computerScore}.`);
+    if (round == 5){
+        paraWinner.textContent = `Winner: 
+            ${(playerScore > computerScore) ? 'Player' :
+            (playerScore < computerScore) ? 'Computer' : 'Draw'}`;
     }
 
-    //Display winner and score
-    if (playerScore > computerScore) console.log("Player wins the game!");
-    else if (playerScore < computerScore) console.log("Player loses the game!");
-    else console.log("The game is a draw!");
-    console.log(`${playerScore} to ${computerScore}.`);
+    round++;
+
+    if (round <= 5) paraRound.textContent = `Round: ${round}/5`;
+    paraScore.textContent = `Score: Player---${playerScore} to ${computerScore}---Computer`;
 }

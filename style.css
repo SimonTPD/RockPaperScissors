@@ -1,0 +1,30 @@
+h1{
+    background-color: black;
+    color: white;
+    font-weight: bolder;
+    margin: 0;
+    padding: 16px;
+}
+
+button{
+    width: 80px;
+    height: 30px;
+    border: none;
+    background-color: lightblue;
+    padding: 6px;
+    border-radius: 4px;
+}
+
+.buttons{
+    background-color: rgba(233, 223, 223, 0.493);
+    padding: 16px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 16px;
+}
+
+.game-info{
+    background-color: rgba(233, 223, 223, 0.493);
+    padding: 16px;
+}
